@@ -10,14 +10,15 @@ import { useFonts } from "expo-font";
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { LinearGradient } from "expo-linear-gradient";
-import Colors from "./constants/constants";
+import Colors from "./constants/Colors";
+import StartGame from "./screens/StartGame";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
-  let screen = [];
+  let screen = <StartGame />;
   /* Load fonts */
   useEffect(() => {
     async function prepare() {
