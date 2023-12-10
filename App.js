@@ -7,7 +7,8 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    "Inter-Black": require("./assets/fonts/OpenSans-Bold.ttf"),
+    "opensans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+    "opensans-regular": require("./assets/fonts/OpenSans-Regular.ttf"),
   });
 
   const onLayoutRootView = useCallback(async () => {
@@ -22,7 +23,7 @@ export default function App() {
 
   return (
     <View style={styles.container} onLayout={onLayoutRootView}>
-      <Text style={{ fontFamily: "Inter-Black", fontSize: 30 }}>
+      <Text style={{ fontFamily: "opensans-bold", fontSize: 30 }}>
         Inter Black
       </Text>
       <Text style={{ fontSize: 30 }}>Platform Default</Text>
