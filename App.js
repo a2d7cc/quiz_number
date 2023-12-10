@@ -1,17 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  ImageBackground,
-  SafeAreaView,
-} from "react-native";
-import { useFonts } from "expo-font";
+import { Text, View, StyleSheet, ImageBackground } from "react-native";
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { LinearGradient } from "expo-linear-gradient";
 import Colors from "./constants/Colors";
 import StartGame from "./screens/StartGame";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
