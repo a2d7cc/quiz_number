@@ -3,11 +3,13 @@ import { Pressable, StyleSheet, TextInput } from "react-native";
 import Button from "../components/ui/Button";
 import { useState } from "react";
 import { Colors } from "react-native/Libraries/NewAppScreen";
+import Title from "../components/ui/Title";
 
 function StartGame() {
   const [enteredNumber, setEnteredNumber] = useState("");
   return (
     <View style={styles.container}>
+      <Title>Guess the number</Title>
       <TextInput
         keyboardType="number-pad"
         maxLength={2}
@@ -34,6 +36,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 100,
     alignItems: "center",
+    paddingHorizontal: 20,
   },
   textInput: {
     height: 50,
@@ -49,6 +52,7 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     flexDirection: "row",
+    marginTop: 10,
   },
   buttonWrapper: {
     flex: 1,
