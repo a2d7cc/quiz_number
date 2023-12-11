@@ -7,6 +7,8 @@ import Title from "../components/ui/Title";
 
 function StartGame() {
   const [enteredNumber, setEnteredNumber] = useState("");
+  
+
   return (
     <View style={styles.container}>
       <Title>Guess the number</Title>

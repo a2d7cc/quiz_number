@@ -16,7 +16,7 @@ Title Guess My Number
 Input Component with buttons confirm, cancel
 
 Second Screen:
-Title Gues Number
+Title Guess Number
 Component Hight or Lower Diapason
 Flat List with Gues rounds
 

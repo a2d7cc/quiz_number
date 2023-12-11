@@ -6,6 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import Colors from "./constants/Colors";
 import StartGame from "./screens/StartGame";
 import { SafeAreaView } from "react-native-safe-area-context";
+import GuessNumber from "./screens/GuessNumber";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -13,6 +14,7 @@ SplashScreen.preventAutoHideAsync();
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
   let screen = <StartGame />;
+  screen = <GuessNumber />;
   /* Load fonts */
   useEffect(() => {
     async function prepare() {
