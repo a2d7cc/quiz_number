@@ -13,8 +13,14 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
-  let screen = <StartGame />;
-  screen = <GuessNumber />;
+  const [userNumber, setUserNumber] = useState();
+
+  const onPickNumber = (number) => {
+    setUserNumber(number);
+  };
+
+  let screen = <StartGame onPickNumber={onPickNumber} />;
+  // screen = <GuessNumber />;
   /* Load fonts */
   useEffect(() => {
     async function prepare() {

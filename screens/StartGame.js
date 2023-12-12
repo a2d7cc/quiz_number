@@ -1,13 +1,31 @@
-import { View, Text } from "react-native";
+import { View, Text, Alert } from "react-native";
 import { Pressable, StyleSheet, TextInput } from "react-native";
 import Button from "../components/ui/Button";
 import { useState } from "react";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import Title from "../components/ui/Title";
 
-function StartGame() {
+function StartGame(onPickNumber) {
   const [enteredNumber, setEnteredNumber] = useState("");
-  
+
+  const onConfirm = () => {
+    const number = parseInt(enteredNumber);
+
+    if (isNaN(number) || number < 1 || number > 99) {
+      Alert.alert("Wrong Number", "Pleease enter a value between 1 and 99", [
+        {
+          text: "Reset",
+          onPress: () => onReset(),
+        },
+      ]);
+    } else {
+      onPickNumber(enteredNumber);
+    }
+  };
+
+  const onReset = () => {
+    setEnteredNumber("");
+  };
 
   return (
     <View style={styles.container}>
@@ -23,10 +41,10 @@ function StartGame() {
       />
       <View style={styles.buttonsContainer}>
         <View style={styles.buttonWrapper}>
-          <Button>Confirm</Button>
+          <Button onPress={onConfirm}>Confirm</Button>
         </View>
         <View style={styles.buttonWrapper}>
-          <Button>Reset</Button>
+          <Button onPress={onReset}>Reset</Button>
         </View>
       </View>
     </View>
