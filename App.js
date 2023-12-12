@@ -5,6 +5,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { LinearGradient } from "expo-linear-gradient";
 import Colors from "./constants/Colors";
 import StartGame from "./screens/StartGame";
+import EndGame from "./screens/GameOver";
 import { SafeAreaView } from "react-native-safe-area-context";
 import GuessNumber from "./screens/GuessNumber";
 
@@ -13,13 +14,37 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
   const [userNumber, setUserNumber] = useState();
 
   const onPickNumber = (number) => {
     setUserNumber(number);
   };
 
+  const onRefreshGame = () => {
+    setUserNumber("");
+  };
+
+  const onEndGame = () => {
+    setGameOver(true);
+  };
+
   let screen = <StartGame onPickNumber={onPickNumber} />;
+
+  if (userNumber) {
+    screen = (
+      <GuessNumber
+        userNumber={userNumber}
+        onEndGame={onEndGame}
+        onRefreshGame={onRefreshGame}
+      />
+    );
+  }
+
+  if (gameOver) {
+    screen = <EndGame />;
+  }
+
   // screen = <GuessNumber />;
   /* Load fonts */
   useEffect(() => {

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import Title from "../components/ui/Title";
 
-function StartGame(onPickNumber) {
+function StartGame({ onPickNumber }) {
   const [enteredNumber, setEnteredNumber] = useState("");
 
   const onConfirm = () => {
