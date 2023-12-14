@@ -29,7 +29,7 @@ export default function App() {
     setGameOver(true);
   };
 
-  let screen = <StartGame onPickNumber={onPickNumber} />;
+    let screen = <StartGame onPickNumber={onPickNumber} />;
 
   if (userNumber) {
     screen = (
