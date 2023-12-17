@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import Colors from "../../constants/Colors";
 
-function LogItem({ roundNumber, guess }) {
+function GuessLogItem({ roundNumber, guess }) {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>#{roundNumber}</Text>
@@ -32,4 +32,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LogItem;
+export default GuessLogItem;

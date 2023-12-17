@@ -4,49 +4,33 @@ import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { LinearGradient } from "expo-linear-gradient";
 import Colors from "./constants/Colors";
-import StartGame from "./screens/StartGame";
-import EndGame from "./screens/GameOver";
 import { SafeAreaView } from "react-native-safe-area-context";
-import GuessNumber from "./screens/GuessNumber";
+import GameOverScreen from "./screens/GameOverScreen";
+import GameScreen from "./screens/GameScreen";
+import StartGameScreen from "./screens/StartGameScreen";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
   const [userNumber, setUserNumber] = useState();
+  const [gameIsOver, setGameIsOver] = useState(true);
   const [guessRounds, setGuessRounds] = useState(0);
 
-  const onPickNumber = (number) => {
-    setUserNumber(number);
-  };
-
-  const onRefreshGame = () => {
-    setUserNumber("");
-  };
-
-  const onEndGame = (roundsLength) => {
-    setGameOver(true);
-    setGuessRounds(roundsLength);
-  };
-
-  let screen = <StartGame onPickNumber={onPickNumber} />;
-
-  if (userNumber) {
-    screen = (
-      <GuessNumber
-        userNumber={userNumber}
-        onEndGame={onEndGame}
-        onRefreshGame={onRefreshGame}
-      />
-    );
+  function pickedNumberHandler(pickedNumber) {
+    setUserNumber(pickedNumber);
+    setGameIsOver(false);
   }
 
-  if (gameOver) {
-    screen = (
-      <EndGame roundsLength={guessRounds.length} userNumber={userNumber} />
-    );
+  function gameOverHandler(numberOfRounds) {
+    setGameIsOver(true);
+    setGuessRounds(numberOfRounds);
+  }
+
+  function startNewGameHandler() {
+    setUserNumber(null);
+    setGuessRounds(0);
   }
 
   // screen = <GuessNumber />;
@@ -55,8 +39,8 @@ export default function App() {
     async function prepare() {
       try {
         await Font.loadAsync({
-          "opensans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
-          "opensans-regular": require("./assets/fonts/OpenSans-Regular.ttf"),
+          "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+          "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
         });
         await new Promise((resolve) => setTimeout(resolve, 500));
       } catch (e) {
@@ -79,22 +63,39 @@ export default function App() {
     return null;
   }
 
+  let screen = <StartGameScreen onPickNumber={pickedNumberHandler} />;
+
+  if (userNumber) {
+    screen = (
+      <GameScreen userNumber={userNumber} onGameOver={gameOverHandler} />
+    );
+  }
+
+  if (gameIsOver && userNumber) {
+    screen = (
+      <GameOverScreen
+        userNumber={userNumber}
+        roundsNumber={guessRounds}
+        onStartNewGame={startNewGameHandler}
+      />
+    );
+  }
+
   return (
-    <View onLayout={onLayoutRootView} style={styles.rootScreen}>
-      <LinearGradient
-        colors={[Colors.primary700, Colors.accent500]}
+    <LinearGradient
+      colors={[Colors.primary700, Colors.accent500]}
+      style={styles.rootScreen}
+      onLayout={onLayoutRootView}
+    >
+      <ImageBackground
+        source={require("./assets/images/background.png")}
+        resizeMode="cover"
         style={styles.rootScreen}
+        imageStyle={styles.backgroundImage}
       >
-        <ImageBackground
-          source={require("./assets/images/background.png")}
-          resizeMode="cover"
-          imageStyle={styles.backgroundImage}
-          style={styles.rootScreen}
-        >
-          <SafeAreaView style={styles.rootScreen}>{screen}</SafeAreaView>
-        </ImageBackground>
-      </LinearGradient>
-    </View>
+        <SafeAreaView style={styles.rootScreen}>{screen}</SafeAreaView>
+      </ImageBackground>
+    </LinearGradient>
   );
 }
 
@@ -103,6 +104,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   backgroundImage: {
-    opacity: 0.3,
+    opacity: 0.15,
   },
 });

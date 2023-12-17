@@ -1,18 +1,20 @@
-import { StyleSheet, Text } from "react-native";
+import { Text, StyleSheet } from "react-native";
 
 function Title({ children }) {
-  return <Text style={styles.text}>{children}</Text>;
+  return <Text style={styles.title}>{children}</Text>;
 }
 
+export default Title;
+
 const styles = StyleSheet.create({
-  text: {
+  title: {
+    fontFamily: "open-sans-bold",
     fontSize: 24,
-    fontFamily: "opensans-bold",
+    // fontWeight: 'bold',
     color: "white",
-    margin: 4,
-    padding: 12,
     textAlign: "center",
+    borderWidth: 2,
+    borderColor: "white",
+    padding: 12,
   },
 });
-
-export default Title;
