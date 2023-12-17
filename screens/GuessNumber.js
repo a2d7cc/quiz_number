@@ -1,8 +1,9 @@
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 import Button from "../components/ui/Button";
 import Title from "../components/ui/Title";
 import { generateRandomBetween } from "../util/random";
 import { useEffect, useState } from "react";
+import LogItem from "../components/game/LogItem";
 
 let minBoundary = 1;
 let maxBoundary = 100;
@@ -14,6 +15,7 @@ function GuessNumber({ userNumber, onEndGame, onRefreshGame }) {
     userNumber
   );
   const [currentGuess, setCurrentGuess] = useState(initialGues);
+  const [guessRounds, setGuessRounds] = useState([initialGues]);
 
   useEffect(() => {
     if (currentGuess == userNumber) {
@@ -21,49 +23,46 @@ function GuessNumber({ userNumber, onEndGame, onRefreshGame }) {
         Alert.alert("Success", "It's your number", [
           {
             text: "Confirm",
-            onPress: () => onEndGame(true),
+            onPress: () => onEndGame(guessRounds.length),
           },
         ]);
       }, 2000);
     }
   }, [currentGuess, userNumber, onEndGame]);
 
-  const generateNewNumber = (direction) => {
+  useEffect(() => {
+    minBoundary = 1;
+    maxBoundary = 100;
+  }, []);
+
+  function nextGuessHandler(direction) {
+    // direction => 'lower', 'greater'
     if (
-      (currentGuess < userNumber && direction === "down") ||
-      (currentGuess > userNumber && direction === "up")
+      (direction === "lower" && currentGuess < userNumber) ||
+      (direction === "greater" && currentGuess > userNumber)
     ) {
-      Alert.alert("Error", "It's impossible", [
-        {
-          text: "Start again",
-          onPress: () => onRefreshGame(),
-        },
+      Alert.alert("Don't lie!", "You know that this is wrong...", [
+        { text: "Sorry!", style: "cancel" },
       ]);
       return;
     }
 
-    if (currentGuess === 1 && direction === "down") {
-      Alert("Error", "You can go lower");
-      return;
-    }
-    if (currentGuess === 99 && direction === "up") {
-      Alert("Error", "You can go higher");
-      return;
+    if (direction === "lower") {
+      maxBoundary = currentGuess;
+    } else {
+      minBoundary = currentGuess + 1;
     }
 
-    switch (direction) {
-      case "down":
-        maxBoundary = currentGuess;
-        setCurrentGuess(generateRandomBetween(minBoundary, currentGuess));
-        break;
-      case "up":
-        minBoundary = currentGuess;
-        setCurrentGuess(generateRandomBetween(currentGuess, maxBoundary));
-        break;
-      default:
-        return null;
-    }
-  };
+    const newRndNumber = generateRandomBetween(
+      minBoundary,
+      maxBoundary,
+      currentGuess
+    );
+    setCurrentGuess(newRndNumber);
+    setGuessRounds((prevGuessRounds) => [newRndNumber, ...prevGuessRounds]);
+  }
+
+  const guessRoundsListLength = guessRounds.length;
 
   return (
     <View style={styles.container}>
@@ -73,11 +72,23 @@ function GuessNumber({ userNumber, onEndGame, onRefreshGame }) {
       </View>
       <View style={styles.buttonsContainer}>
         <View style={styles.buttonWrapper}>
-          <Button onPress={() => generateNewNumber("down")}>-</Button>
+          <Button onPress={() => nextGuessHandler("lower")}>-</Button>
         </View>
         <View style={styles.buttonWrapper}>
-          <Button onPress={() => generateNewNumber("up")}>+</Button>
+          <Button onPress={() => nextGuessHandler("greater")}>+</Button>
         </View>
+      </View>
+      <View style={styles.roundsContainer}>
+        <FlatList
+          style={{ paddingHorizontal: 20 }}
+          data={guessRounds}
+          renderItem={(itemData) => (
+            <LogItem
+              roundNumber={guessRoundsListLength - itemData.index}
+              guess={itemData.item}
+            />
+          )}
+        />
       </View>
     </View>
   );
@@ -89,6 +100,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 140,
+    alignItems: "center",
   },
   numberContainer: {},
   number: {
@@ -102,5 +114,9 @@ const styles = StyleSheet.create({
   },
   buttonWrapper: {
     flex: 1,
+  },
+  roundsContainer: {
+    flex: 1,
+    padding: 16,
   },
 });
